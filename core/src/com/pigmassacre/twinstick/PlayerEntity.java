@@ -10,11 +10,6 @@ public class PlayerEntity extends Entity {
 
 	private Model bulletModel;
 
-	public PlayerEntity(Model model, Model  bulletModel,  float x, float y) {
-		super(model, x, y);
-		this.bulletModel = bulletModel;
-	}
-
 	public PlayerEntity(Model model, Model bulletModel, float x, float y, float z) {
 		super(model, x, y, z);
 		this.bulletModel = bulletModel;

@@ -3,12 +3,9 @@ package com.pigmassacre.twinstick.Screens;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -26,9 +23,6 @@ public class GameScreen extends AbstractScreen {
 
 	private CameraInputController cameraInputController;
 
-	private Environment environment;
-	private ModelBatch modelBatch;
-
 	public GameScreen() {
 		camera = new OrthographicCamera();
 		viewport = new ScreenViewport(camera);
@@ -42,12 +36,6 @@ public class GameScreen extends AbstractScreen {
 
 		cameraInputController = new CameraInputController(camera);
 		inputMultiplexer.addProcessor(cameraInputController);
-
-		environment = new Environment();
-		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
-
-		modelBatch = new ModelBatch();
 
 		ModelBuilder modelBuilder = new ModelBuilder();
 		Model playerModel = modelBuilder.createBox(3f, 3f, 3f,
@@ -70,25 +58,18 @@ public class GameScreen extends AbstractScreen {
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
-		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerModel, bulletModel, 0f, 0f));
-		Level.INSTANCE.addEntity(new Entity(horizontalWallModel, 0f, 30f));
-		Level.INSTANCE.addEntity(new Entity(verticalWallModel, -50f, 0f));
-		Level.INSTANCE.addEntity(new Entity(verticalWallModel, 50f, 0f));
-		Level.INSTANCE.addEntity(new Entity(horizontalWallModel, 0f, -30f));
+		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerModel, bulletModel, 0f, 0f, 0f));
+		Level.INSTANCE.addEntity(new Entity(horizontalWallModel, 0f, 30f, 0f));
+		Level.INSTANCE.addEntity(new Entity(verticalWallModel, -50f, 0f, 0f));
+		Level.INSTANCE.addEntity(new Entity(verticalWallModel, 50f, 0f, 0f));
+		Level.INSTANCE.addEntity(new Entity(horizontalWallModel, 0f, -30f, 0f));
 		Level.INSTANCE.addEntity(new Entity(floorModel, 0f, 0f, -2f));
 	}
 
 	@Override
 	public void render(float delta) {
 		super.render(delta);
-
-		Level.INSTANCE.update(delta);
-
-		modelBatch.begin(camera);
-		for (Entity entity : Level.INSTANCE.getEntities()) {
-			entity.render(modelBatch, environment);
-		}
-		modelBatch.end();
+		Level.INSTANCE.render(delta, camera);
 	}
 
 	@Override
@@ -100,9 +81,6 @@ public class GameScreen extends AbstractScreen {
 	@Override
 	public void dispose() {
 		super.dispose();
-		modelBatch.dispose();
-		for (Entity entity : Level.INSTANCE.getEntities()) {
-			entity.getModel().dispose();
-		}
+		Level.INSTANCE.dispose();
 	}
 }
