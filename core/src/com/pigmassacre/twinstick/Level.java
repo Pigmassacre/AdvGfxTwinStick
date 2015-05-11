@@ -32,7 +32,7 @@ public enum Level {
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 		modelBatch = new ModelBatch();
 
-		bounds = new Rectangle(0f, 0f, 100f, 60f);
+		bounds = new Rectangle(-50f, -30f, 100f, 60f);
 
 		entities = new Array<Entity>();
 	}
@@ -43,7 +43,8 @@ public enum Level {
 		for (Entity entity : getEntities()) {
 			entity.update(delta);
 			if (!Intersector.overlaps(bounds, entity.getRectangle())) {
-				//entities.removeValue(entity, true);
+				entities.removeValue(entity, true);
+				System.out.println("out of bounds");
 			}
 		}
 
