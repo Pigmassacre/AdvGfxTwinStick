@@ -1,4 +1,4 @@
-package com.pigmassacre.twinstick;
+package com.pigmassacre.twinstick.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,7 +9,10 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.pigmassacre.twinstick.Entity;
+import com.pigmassacre.twinstick.PlayerInputAdapter;
 
 /**
  * Created by Pigmassacre on 2015-05-11.
@@ -23,20 +26,23 @@ public class GameScreen extends AbstractScreen {
 
 	private Environment environment;
 	private ModelBatch modelBatch;
-	private Model model;
-	private ModelInstance instance;
+
+	private Array<Entity> entities;
+	private Entity playerEntity;
 
 	public GameScreen() {
 		camera = new OrthographicCamera();
 		viewport = new ScreenViewport(camera);
 
-		camera.position.set(5f, 5f, 5f);
-		camera.zoom = 0.05f;
+		camera.position.set(0f, 25f, -25f);
+		camera.zoom = 1f / 16f;
 		camera.lookAt(0f, 0f, 0f);
+		camera.near = 0f;
+		camera.far = 300f;
 		camera.update();
 
 		cameraInputController = new CameraInputController(camera);
-		Gdx.input.setInputProcessor(cameraInputController);
+		inputMultiplexer.addProcessor(cameraInputController);
 
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
@@ -45,10 +51,22 @@ public class GameScreen extends AbstractScreen {
 		modelBatch = new ModelBatch();
 
 		ModelBuilder modelBuilder = new ModelBuilder();
-		model = modelBuilder.createBox(5f, 5f, 5f,
+		Model playerModel = modelBuilder.createBox(3f, 3f, 3f,
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-		instance = new ModelInstance(model);
+
+		Model wallModel = modelBuilder.createBox(30f, 5f, 5f,
+				new Material(ColorAttribute.createDiffuse(Color.BLUE)),
+				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+
+		entities = new Array<Entity>();
+
+		playerEntity = new Entity(playerModel, 0f, 0f);
+		entities.add(playerEntity);
+		entities.add(new Entity(wallModel, 0f, 15f));
+		entities.add(new Entity(wallModel, 0f, -15f));
+
+		inputMultiplexer.addProcessor(new PlayerInputAdapter(playerEntity));
 	}
 
 	@Override
@@ -56,7 +74,9 @@ public class GameScreen extends AbstractScreen {
 		super.render(delta);
 
 		modelBatch.begin(camera);
-		modelBatch.render(instance, environment);
+		for (Entity entity : entities) {
+			entity.render(modelBatch, environment);
+		}
 		modelBatch.end();
 	}
 
@@ -70,6 +90,8 @@ public class GameScreen extends AbstractScreen {
 	public void dispose() {
 		super.dispose();
 		modelBatch.dispose();
-		model.dispose();
+		for (Entity entity : entities) {
+			entity.getModel().dispose();
+		}
 	}
 }

@@ -1,6 +1,7 @@
-package com.pigmassacre.twinstick;
+package com.pigmassacre.twinstick.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,8 +13,12 @@ public class AbstractScreen implements Screen {
 
 	protected Stage stage;
 
+	protected InputMultiplexer inputMultiplexer;
+
 	public AbstractScreen() {
 		stage = new Stage();
+		inputMultiplexer = new InputMultiplexer();
+		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
 	@Override
