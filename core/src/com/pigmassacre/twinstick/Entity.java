@@ -32,7 +32,7 @@ public class Entity {
 	public void render(ModelBatch batch, Environment environment) {
 		position.add(velocity);
 
-		instance.transform.setToTranslation(-position.x, position.z, position.y);
+		instance.transform.setToTranslation(position.x, position.z, position.y);
 		batch.render(instance, environment);
 	}
 

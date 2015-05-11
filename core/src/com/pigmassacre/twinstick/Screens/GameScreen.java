@@ -1,10 +1,13 @@
 package com.pigmassacre.twinstick.Screens;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.*;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
@@ -12,7 +15,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pigmassacre.twinstick.Entity;
-import com.pigmassacre.twinstick.PlayerInputAdapter;
+import com.pigmassacre.twinstick.PlayerControllerInputAdapter;
 
 /**
  * Created by Pigmassacre on 2015-05-11.
@@ -77,7 +80,9 @@ public class GameScreen extends AbstractScreen {
 		entities.add(new Entity(horizontalWallModel, 0f, -30f));
 		entities.add(new Entity(floorModel, 0f, 0f, -2f));
 
-		inputMultiplexer.addProcessor(new PlayerInputAdapter(playerEntity));
+		if (Controllers.getControllers().size > 0) {
+			Controllers.getControllers().get(0).addListener(new PlayerControllerInputAdapter(playerEntity));
+		}
 	}
 
 	@Override
