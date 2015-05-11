@@ -7,6 +7,9 @@ public class TwinStick extends Game {
 
 	@Override
 	public void create () {
+		Assets.loadAtlas();
+		Assets.getAssetManager().finishLoading();
+
 		setScreen(new GameScreen());
 	}
 

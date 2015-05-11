@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 public class PlayerControllerInputAdapter extends ControllerAdapter {
 
 	private static final float SHOOT_COOLDOWN_TIME = 0.1f;
-	private static final float DEADZONE = 0.15f;
+	private static final float DEADZONE = 0.25f;
 
 	private PlayerEntity controlledEntity;
 

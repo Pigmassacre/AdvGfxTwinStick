@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.pigmassacre.twinstick.Assets;
 import com.pigmassacre.twinstick.Entity;
 import com.pigmassacre.twinstick.Level;
 import com.pigmassacre.twinstick.PlayerEntity;
@@ -43,16 +45,16 @@ public class GameScreen extends AbstractScreen {
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
 		Model horizontalWallModel = modelBuilder.createBox(100f, 5f, 5f,
-				new Material(ColorAttribute.createDiffuse(Color.BLUE)),
-				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+				new Material(TextureAttribute.createDiffuse(Assets.getAtlas().findRegion("wall"))),
+				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
 		Model verticalWallModel = modelBuilder.createBox(5f, 5f, 60f,
-				new Material(ColorAttribute.createDiffuse(Color.BLUE)),
-				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+				new Material(TextureAttribute.createDiffuse(Assets.getAtlas().findRegion("wall"))),
+				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
 		Model floorModel = modelBuilder.createBox(100f, 1f, 60f,
-				new Material(ColorAttribute.createDiffuse(Color.DARK_GRAY)),
-				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+				new Material(TextureAttribute.createDiffuse(Assets.getAtlas().findRegion("floor"))),
+				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
 		Model bulletModel = modelBuilder.createBox(0.5f, 0.5f, 0.5f,
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)),
