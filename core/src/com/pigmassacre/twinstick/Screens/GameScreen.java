@@ -55,16 +55,27 @@ public class GameScreen extends AbstractScreen {
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
-		Model wallModel = modelBuilder.createBox(30f, 5f, 5f,
+		Model horizontalWallModel = modelBuilder.createBox(100f, 5f, 5f,
 				new Material(ColorAttribute.createDiffuse(Color.BLUE)),
+				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+
+		Model verticalWallModel = modelBuilder.createBox(5f, 5f, 60f,
+				new Material(ColorAttribute.createDiffuse(Color.BLUE)),
+				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+
+		Model floorModel = modelBuilder.createBox(100f, 1f, 60f,
+				new Material(ColorAttribute.createDiffuse(Color.RED)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
 		entities = new Array<Entity>();
 
 		playerEntity = new Entity(playerModel, 0f, 0f);
 		entities.add(playerEntity);
-		entities.add(new Entity(wallModel, 0f, 15f));
-		entities.add(new Entity(wallModel, 0f, -15f));
+		entities.add(new Entity(horizontalWallModel, 0f, 30f));
+		entities.add(new Entity(verticalWallModel, -50f, 0f));
+		entities.add(new Entity(verticalWallModel, 50f, 0f));
+		entities.add(new Entity(horizontalWallModel, 0f, -30f));
+		entities.add(new Entity(floorModel, 0f, 0f, -2f));
 
 		inputMultiplexer.addProcessor(new PlayerInputAdapter(playerEntity));
 	}

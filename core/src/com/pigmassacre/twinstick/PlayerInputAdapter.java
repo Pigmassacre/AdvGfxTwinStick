@@ -18,16 +18,16 @@ public class PlayerInputAdapter extends InputAdapter {
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
 			case Input.Keys.LEFT:
-				controlledEntity.getVelocity().add(-0.05f, 0f);
+				controlledEntity.getVelocity().add(-0.05f, 0f, 0f);
 				break;
 			case Input.Keys.RIGHT:
-				controlledEntity.getVelocity().add(0.05f, 0f);
+				controlledEntity.getVelocity().add(0.05f, 0f, 0f);
 				break;
 			case Input.Keys.UP:
-				controlledEntity.getVelocity().add(0f, 0.05f);
+				controlledEntity.getVelocity().add(0f, 0.05f, 0f);
 				break;
 			case Input.Keys.DOWN:
-				controlledEntity.getVelocity().add(0f, -0.05f);
+				controlledEntity.getVelocity().add(0f, -0.05f, 0f);
 				break;
 		}
 		return true;
