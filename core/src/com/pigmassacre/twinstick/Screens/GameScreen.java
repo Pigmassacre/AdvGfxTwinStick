@@ -1,6 +1,5 @@
 package com.pigmassacre.twinstick.Screens;
 
-import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.VertexAttributes;
@@ -12,10 +11,10 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pigmassacre.twinstick.Entity;
-import com.pigmassacre.twinstick.PlayerControllerInputAdapter;
+import com.pigmassacre.twinstick.Level;
+import com.pigmassacre.twinstick.PlayerEntity;
 
 /**
  * Created by Pigmassacre on 2015-05-11.
@@ -29,9 +28,6 @@ public class GameScreen extends AbstractScreen {
 
 	private Environment environment;
 	private ModelBatch modelBatch;
-
-	private Array<Entity> entities;
-	private Entity playerEntity;
 
 	public GameScreen() {
 		camera = new OrthographicCamera();
@@ -67,30 +63,29 @@ public class GameScreen extends AbstractScreen {
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
 		Model floorModel = modelBuilder.createBox(100f, 1f, 60f,
-				new Material(ColorAttribute.createDiffuse(Color.RED)),
+				new Material(ColorAttribute.createDiffuse(Color.DARK_GRAY)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
-		entities = new Array<Entity>();
+		Model bulletModel = modelBuilder.createBox(0.5f, 0.5f, 0.5f,
+				new Material(ColorAttribute.createDiffuse(Color.GREEN)),
+				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
-		playerEntity = new Entity(playerModel, 0f, 0f);
-		entities.add(playerEntity);
-		entities.add(new Entity(horizontalWallModel, 0f, 30f));
-		entities.add(new Entity(verticalWallModel, -50f, 0f));
-		entities.add(new Entity(verticalWallModel, 50f, 0f));
-		entities.add(new Entity(horizontalWallModel, 0f, -30f));
-		entities.add(new Entity(floorModel, 0f, 0f, -2f));
-
-		if (Controllers.getControllers().size > 0) {
-			Controllers.getControllers().get(0).addListener(new PlayerControllerInputAdapter(playerEntity));
-		}
+		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerModel, bulletModel, 0f, 0f));
+		Level.INSTANCE.addEntity(new Entity(horizontalWallModel, 0f, 30f));
+		Level.INSTANCE.addEntity(new Entity(verticalWallModel, -50f, 0f));
+		Level.INSTANCE.addEntity(new Entity(verticalWallModel, 50f, 0f));
+		Level.INSTANCE.addEntity(new Entity(horizontalWallModel, 0f, -30f));
+		Level.INSTANCE.addEntity(new Entity(floorModel, 0f, 0f, -2f));
 	}
 
 	@Override
 	public void render(float delta) {
 		super.render(delta);
 
+		Level.INSTANCE.update(delta);
+
 		modelBatch.begin(camera);
-		for (Entity entity : entities) {
+		for (Entity entity : Level.INSTANCE.getEntities()) {
 			entity.render(modelBatch, environment);
 		}
 		modelBatch.end();
@@ -106,7 +101,7 @@ public class GameScreen extends AbstractScreen {
 	public void dispose() {
 		super.dispose();
 		modelBatch.dispose();
-		for (Entity entity : entities) {
+		for (Entity entity : Level.INSTANCE.getEntities()) {
 			entity.getModel().dispose();
 		}
 	}
