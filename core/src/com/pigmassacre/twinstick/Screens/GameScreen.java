@@ -29,9 +29,9 @@ public class GameScreen extends AbstractScreen {
 		camera = new OrthographicCamera();
 		viewport = new ScreenViewport(camera);
 
-		camera.position.set(0f, 25f, -25f);
+		camera.position.set(25f, 40f, 25f);
 		camera.zoom = 1f / 16f;
-		camera.lookAt(0f, 0f, 0f);
+		camera.lookAt(25f, 0f, 25f);
 		camera.near = 0f;
 		camera.far = 300f;
 		camera.update();
@@ -44,15 +44,11 @@ public class GameScreen extends AbstractScreen {
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
-		Model horizontalWallModel = modelBuilder.createBox(100f, 5f, 5f,
+		Model box = modelBuilder.createBox(5f, 5f, 5f,
 				new Material(TextureAttribute.createDiffuse(Assets.getAtlas().findRegion("wall"))),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
-		Model verticalWallModel = modelBuilder.createBox(5f, 5f, 60f,
-				new Material(TextureAttribute.createDiffuse(Assets.getAtlas().findRegion("wall"))),
-				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
-
-		Model floorModel = modelBuilder.createBox(100f, 1f, 60f,
+		Model floorModel = modelBuilder.createBox(5f, 1f, 5f,
 				new Material(TextureAttribute.createDiffuse(Assets.getAtlas().findRegion("floor"))),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
@@ -61,11 +57,21 @@ public class GameScreen extends AbstractScreen {
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
 		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerModel, bulletModel, 0f, 0f, 0f));
-		Level.INSTANCE.addEntity(new Entity(horizontalWallModel, 0f, 30f, 0f));
-		Level.INSTANCE.addEntity(new Entity(verticalWallModel, -50f, 0f, 0f));
-		Level.INSTANCE.addEntity(new Entity(verticalWallModel, 50f, 0f, 0f));
-		Level.INSTANCE.addEntity(new Entity(horizontalWallModel, 0f, -30f, 0f));
-		Level.INSTANCE.addEntity(new Entity(floorModel, 0f, 0f, -2f));
+		for (int x = 0; x < 12; x++) {
+			Level.INSTANCE.addEntity(new Entity(box, (5f * x) - 5f, -5f, 0));
+			Level.INSTANCE.addEntity(new Entity(box, (5f * x) - 5f, 30f, 0));
+		}
+
+		for (int y = 0; y < 6; y++) {
+			Level.INSTANCE.addEntity(new Entity(box, -5f, (5f * y), 0));
+			Level.INSTANCE.addEntity(new Entity(box, 50f, (5f * y), 0));
+		}
+
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 6; j++) {
+				Level.INSTANCE.addEntity(new Entity(floorModel, 5f * i, 5f * j, -3f));
+			}
+		}
 	}
 
 	@Override

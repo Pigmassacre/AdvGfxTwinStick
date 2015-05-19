@@ -43,8 +43,8 @@ public enum Level {
 		for (Entity entity : getEntities()) {
 			entity.update(delta);
 			if (!Intersector.overlaps(bounds, entity.getRectangle())) {
-				entities.removeValue(entity, true);
-				System.out.println("out of bounds");
+				//entities.removeValue(entity, true);
+				//System.out.println("out of bounds");
 			}
 		}
 
