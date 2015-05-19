@@ -1,5 +1,6 @@
 package com.pigmassacre.twinstick.Screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.VertexAttributes;
@@ -7,13 +8,18 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pigmassacre.twinstick.Assets;
 import com.pigmassacre.twinstick.Entity;
 import com.pigmassacre.twinstick.Level;
 import com.pigmassacre.twinstick.PlayerEntity;
+import com.pigmassacre.twinstick.Shaders.BillboardShader;
 
 /**
  * Created by Pigmassacre on 2015-05-11.
@@ -29,18 +35,17 @@ public class GameScreen extends AbstractScreen {
 		camera = new OrthographicCamera();
 		viewport = new ScreenViewport(camera);
 
-		camera.position.set(25f, 40f, 25f);
+		camera.position.set(0, 40f, 25f);
 		camera.zoom = 1f / 16f;
-		camera.lookAt(25f, 0f, 25f);
+		camera.lookAt(0f, 0f, 0f);
 		camera.near = 0f;
 		camera.far = 300f;
 		camera.update();
 
 		cameraInputController = new CameraInputController(camera);
 		inputMultiplexer.addProcessor(cameraInputController);
-
 		ModelBuilder modelBuilder = new ModelBuilder();
-		Model playerModel = modelBuilder.createBox(3f, 3f, 3f,
+		Model playerModel = modelBuilder.createBox(3f, 3f, 0f,
 				new Material(ColorAttribute.createDiffuse(Color.GREEN)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 

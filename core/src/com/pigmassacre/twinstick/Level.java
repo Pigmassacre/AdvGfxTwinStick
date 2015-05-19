@@ -4,11 +4,13 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.pigmassacre.twinstick.Shaders.BillboardShader;
 
 /**
  * Created by Pigmassacre on 2015-05-11.
@@ -17,7 +19,9 @@ public enum Level {
 	INSTANCE;
 
 	private Environment environment;
+	private DirectionalLight directionalLight;
 	private ModelBatch modelBatch;
+	private Shader shader;
 
 	private Rectangle bounds;
 
@@ -27,9 +31,14 @@ public enum Level {
 	private PlayerControllerInputAdapter playerControllerInputAdapter;
 
 	Level() {
+		shader = new BillboardShader();
+		shader.init();
+
 		environment = new Environment();
-		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+		//environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+		directionalLight = new DirectionalLight();
+		directionalLight.set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f);
+		environment.add(directionalLight);
 		modelBatch = new ModelBatch();
 
 		bounds = new Rectangle(-50f, -30f, 100f, 60f);
@@ -48,9 +57,11 @@ public enum Level {
 			}
 		}
 
+		directionalLight.direction.set(playerEntity.getPosition().cpy().nor()).y = -1f;
+
 		modelBatch.begin(camera);
 		for (Entity entity : getEntities()) {
-			entity.render(modelBatch, environment);
+			entity.render(modelBatch, shader);
 		}
 		modelBatch.end();
 	}
@@ -73,6 +84,7 @@ public enum Level {
 	}
 
 	public void dispose() {
+		shader.dispose();
 		modelBatch.dispose();
 		for (Entity entity : getEntities()) {
 			entity.getModel().dispose();

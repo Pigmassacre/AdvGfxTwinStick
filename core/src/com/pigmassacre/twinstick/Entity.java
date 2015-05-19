@@ -1,9 +1,6 @@
 package com.pigmassacre.twinstick;
 
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -37,6 +34,11 @@ public class Entity {
 	public void render(ModelBatch batch, Environment environment) {
 		instance.transform.setToTranslation(position.x, position.z, position.y);
 		batch.render(instance, environment);
+	}
+
+	public void render(ModelBatch batch, Shader shader) {
+		instance.transform.setToTranslation(position.x, position.z, position.y);
+		batch.render(instance, shader);
 	}
 
 	public Vector3 getPosition() {

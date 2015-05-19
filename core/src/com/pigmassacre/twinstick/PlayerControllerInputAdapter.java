@@ -39,18 +39,18 @@ public class PlayerControllerInputAdapter extends ControllerAdapter {
 		switch (axisIndex) {
 			// Left Stick
 			case 0: // Up and Down
-				controlledEntity.getVelocity().y = -value * 0.8f;
+				controlledEntity.getVelocity().y = value * 0.8f;
 				break;
 			case 1: // Left and Right
-				controlledEntity.getVelocity().x = -value * 0.8f;
+				controlledEntity.getVelocity().x = value * 0.8f;
 				break;
 
 			// Right Stick
 			case 3: // Up and Down
-				shootDirection.y = -value * 2f;
+				shootDirection.y = value * 2f;
 				break;
 			case 2: // Left and Right
-				shootDirection.x = -value * 2f;
+				shootDirection.x = value * 2f;
 				break;
 		}
 		return false;
