@@ -18,7 +18,6 @@ import com.pigmassacre.twinstick.Shaders.BillboardShader;
 public enum Level {
 	INSTANCE;
 
-	private Environment environment;
 	private DirectionalLight directionalLight;
 	private ModelBatch modelBatch;
 	private Shader shader;
@@ -34,11 +33,6 @@ public enum Level {
 		shader = new BillboardShader();
 		shader.init();
 
-		environment = new Environment();
-		//environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-		directionalLight = new DirectionalLight();
-		directionalLight.set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f);
-		environment.add(directionalLight);
 		modelBatch = new ModelBatch();
 
 		bounds = new Rectangle(-50f, -30f, 100f, 60f);
@@ -56,8 +50,6 @@ public enum Level {
 				//System.out.println("out of bounds");
 			}
 		}
-
-		directionalLight.direction.set(playerEntity.getPosition().cpy().nor()).y = -1f;
 
 		modelBatch.begin(camera);
 		for (Entity entity : getEntities()) {
