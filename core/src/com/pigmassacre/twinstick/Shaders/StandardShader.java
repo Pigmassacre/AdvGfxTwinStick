@@ -99,7 +99,7 @@ public class StandardShader implements Shader {
 		program.setUniformMatrix(modelMatrix, renderable.worldTransform);
 		program.setUniformMatrix(modelViewMatrix, camera.view.cpy().mul(renderable.worldTransform));
 		program.setUniformMatrix(modelViewProjectionMatrix, camera.projection.cpy().mul(camera.view).mul(renderable.worldTransform));
-		program.setUniformMatrix(normalMatrix, renderable.worldTransform.cpy().mul(camera.view).inv().tra());
+		program.setUniformMatrix(normalMatrix, camera.view.cpy().mul(renderable.worldTransform).tra().inv());
 		program.setUniformi(texture, context.textureBinder.bind(((TextureAttribute) renderable.material.get(TextureAttribute.Diffuse)).textureDescription));
 		if (lightEntity != null) {
 			// We need to flip the z and y values since I use them differently in the game logic..
