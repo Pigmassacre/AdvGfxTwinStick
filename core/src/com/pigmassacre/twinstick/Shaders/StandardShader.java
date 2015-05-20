@@ -89,7 +89,7 @@ public class StandardShader implements Shader {
 		program.setUniformf(material_specular_color, 0f, 0f, 0f);
 		program.setUniformf(material_emissive_color, 0f, 0f, 0f);
 
-		program.setUniformf(scene_ambient_light, 0.5f, 0.5f, 0.5f);
+		program.setUniformf(scene_ambient_light, 0.05f, 0.05f, 0.05f);
 		program.setUniformf(scene_light, 0.6f, 0.6f, 0.6f);
 
 		program.setUniformMatrix(modelMatrix, renderable.worldTransform);
@@ -97,7 +97,7 @@ public class StandardShader implements Shader {
 		program.setUniformMatrix(modelViewProjectionMatrix, camera.projection.cpy().mul(camera.view).mul(renderable.worldTransform));
 		program.setUniformMatrix(normalMatrix, renderable.worldTransform.cpy().mul(camera.view).inv().tra());
 		program.setUniformi(texture, context.textureBinder.bind(((TextureAttribute) renderable.material.get(TextureAttribute.Diffuse)).textureDescription));
-		program.setUniformf(viewSpaceLightPosition, camera.project(new Vector3(0f, 5f, 0f)));
+		program.setUniformf(viewSpaceLightPosition, camera.project(new Vector3(0f, 10f, 25f)));
 		renderable.mesh.render(program,
 				renderable.primitiveType,
 				renderable.meshPartOffset,

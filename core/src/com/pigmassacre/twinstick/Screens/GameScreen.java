@@ -30,7 +30,7 @@ public class GameScreen extends AbstractScreen {
 		camera = new OrthographicCamera();
 		viewport = new ScreenViewport(camera);
 
-		camera.position.set(0, 40f, 25f);
+		camera.position.set(0f, 40f, 25f);
 		camera.zoom = 1f / 16f;
 		camera.lookAt(0f, 0f, 0f);
 		camera.near = 0f;
