@@ -40,7 +40,6 @@ public class StandardShader implements Shader {
 
 	private int scene_ambient_light;
 	private int scene_light;
-	private float stateTime = 0f;
 
 	@Override
 	public void init() {
@@ -89,13 +88,13 @@ public class StandardShader implements Shader {
 
 	@Override
 	public void render(Renderable renderable) {
-		program.setUniformf(material_shininess, 25f);
+		program.setUniformf(material_shininess, 5f);
 		program.setUniformf(material_diffuse_color, 1f, 1f, 1f);
 		program.setUniformf(material_specular_color, 0.1f, 0.1f, 0.1f);
 		program.setUniformf(material_emissive_color, 0f, 0f, 0f);
 
-		program.setUniformf(scene_ambient_light, 0.05f, 0.05f, 0.05f);
-		program.setUniformf(scene_light, 0.6f, 0.6f, 0.6f);
+		program.setUniformf(scene_ambient_light, 0.25f, 0.25f, 0.25f);
+		program.setUniformf(scene_light, 0.75f, 0.75f, 0.75f);
 
 		program.setUniformMatrix(modelMatrix, renderable.worldTransform);
 		program.setUniformMatrix(modelViewMatrix, camera.view.cpy().mul(renderable.worldTransform));
@@ -103,11 +102,10 @@ public class StandardShader implements Shader {
 		program.setUniformMatrix(normalMatrix, renderable.worldTransform.cpy().mul(camera.view).inv().tra());
 		program.setUniformi(texture, context.textureBinder.bind(((TextureAttribute) renderable.material.get(TextureAttribute.Diffuse)).textureDescription));
 		if (lightEntity != null) {
-			stateTime += Gdx.graphics.getDeltaTime();
 			// We need to flip the z and y values since I use them differently in the game logic..
 			Vector3 cpy = lightEntity.getPosition().cpy();
 			float temp = cpy.z;
-			cpy.z = cpy.y + MathUtils.sin(stateTime * 0.005f) * 5f;
+			cpy.z = cpy.y;
 			cpy.y = temp;
 			program.setUniformf(viewSpaceLightPosition, cpy.mul(camera.view));
 		} else {

@@ -30,9 +30,13 @@ public class GameScreen extends AbstractScreen {
 		camera = new OrthographicCamera();
 		viewport = new ScreenViewport(camera);
 
-		camera.position.set(0f, 40f, 25f);
+		camera.position.set(Level.INSTANCE.getBounds().x + Level.INSTANCE.getBounds().width / 2f,
+				40f,
+				Level.INSTANCE.getBounds().y + Level.INSTANCE.getBounds().height / 2f);
 		camera.zoom = 1f / 16f;
-		camera.lookAt(0f, 0f, 0f);
+		camera.lookAt(Level.INSTANCE.getBounds().x + Level.INSTANCE.getBounds().width / 2f,
+				0f,
+				Level.INSTANCE.getBounds().y + Level.INSTANCE.getBounds().height / 2f);
 		camera.near = 0f;
 		camera.far = 300f;
 		camera.update();
@@ -68,19 +72,20 @@ public class GameScreen extends AbstractScreen {
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
 		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerModel, bulletModel, 0f, 0f, 0f));
-		for (int x = 0; x < 12; x++) {
+
+		for (int x = 0; x < Level.INSTANCE.getBounds().width / 5f; x++) {
 			Level.INSTANCE.addEntity(new Entity(box, (5f * x) - 5f, -5f, 0));
-			Level.INSTANCE.addEntity(new Entity(box, (5f * x) - 5f, 30f, 0));
+			Level.INSTANCE.addEntity(new Entity(box, (5f * x) - 5f, Level.INSTANCE.getBounds().height, 0));
 		}
 
-		for (int y = 0; y < 6; y++) {
+		for (int y = 0; y < Level.INSTANCE.getBounds().height / 5f; y++) {
 			Level.INSTANCE.addEntity(new Entity(box, -5f, (5f * y), 0));
-			Level.INSTANCE.addEntity(new Entity(box, 50f, (5f * y), 0));
+			Level.INSTANCE.addEntity(new Entity(box, Level.INSTANCE.getBounds().width, (5f * y), 0));
 		}
 
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 6; j++) {
-				Level.INSTANCE.addEntity(new Entity(floorModel, 5f * i, 5f * j, -3f));
+		for (int x = 0; x < Level.INSTANCE.getBounds().width / 5f; x++) {
+			for (int y = 0; y < Level.INSTANCE.getBounds().height / 5f; y++) {
+				Level.INSTANCE.addEntity(new Entity(floorModel, 5f * x, 5f * y, -3f));
 			}
 		}
 	}

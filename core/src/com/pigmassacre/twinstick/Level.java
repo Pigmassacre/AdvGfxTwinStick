@@ -31,7 +31,7 @@ public enum Level {
 
 		modelBatch = new ModelBatch();
 
-		bounds = new Rectangle(-50f, -30f, 100f, 60f);
+		bounds = new Rectangle(0f, 0f, 100f, 60f);
 
 		entities = new Array<Entity>();
 	}
@@ -78,5 +78,9 @@ public enum Level {
 		for (Entity entity : getEntities()) {
 			entity.getModel().dispose();
 		}
+	}
+
+	public Rectangle getBounds() {
+		return bounds;
 	}
 }
