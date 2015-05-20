@@ -15,6 +15,8 @@ in vec3 viewSpaceNormal;
 in vec3 viewSpacePosition;
 
 uniform sampler2D texture;
+uniform int useNormal;
+uniform sampler2D normal_texture;
 varying vec2 v_texCoord0;
 
 
@@ -38,6 +40,10 @@ vec3 calculateFresnel(vec3 materialSpecular, vec3 normal, vec3 directionFromEye)
 
 void main() {
 
+    // Normal Mapping
+    vec3 normalMapVal = normalize(texture2D(normal_texture, gl_TexCoord[0].st).rgb * 2.0 - 1.0);
+
+    // Ambient, Diffuse, Specular, Emissive
     vec3 ambient = material_diffuse_color * texture2D(texture, v_texCoord0).xyz;
     vec3 diffuse = texture2D(texture, v_texCoord0).xyz * material_diffuse_color;
     vec3 specular = material_specular_color;
@@ -53,6 +59,11 @@ void main() {
         + calculateDiffuse(scene_light, diffuse, normal, directionToLight)
         + calculateSpecular(scene_light, fresnelSpecular, material_shininess, normal, directionToLight, directionFromEye)
         + emissive;
+
+    if (useNormal == 1) {
+       shading += max(dot(normal, viewSpaceLightPosition), 0.0) * texture2D(texture, v_texCoord0.st).rgb;
+    }
+
     vec4 fragmentColor = vec4(shading, 1.0);
 
     gl_FragColor = fragmentColor;

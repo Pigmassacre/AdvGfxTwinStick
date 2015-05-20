@@ -55,8 +55,11 @@ public class GameScreen extends AbstractScreen {
 
 		Texture boxTex = new Texture(Gdx.files.internal("wall.png"));
 		boxTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+		Texture boxNormalTex = new Texture(Gdx.files.internal("wall_normal.png"));
+		boxNormalTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		Model box = modelBuilder.createBox(5f, 5f, 5f,
-				new Material(TextureAttribute.createDiffuse(boxTex)),
+				new Material(TextureAttribute.createDiffuse(boxTex),
+						TextureAttribute.createNormal(boxNormalTex)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
 		Texture floorTex = new Texture(Gdx.files.internal("floor.png"));

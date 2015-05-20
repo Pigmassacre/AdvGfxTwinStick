@@ -3,6 +3,7 @@ package com.pigmassacre.twinstick.Shaders;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
@@ -31,6 +32,8 @@ public class StandardShader implements Shader {
 
 	private int normalMatrix;
 	private int texture;
+	private int normal_texture;
+	private int useNormal;
 	private int viewSpaceLightPosition;
 
 	private int material_shininess;
@@ -53,8 +56,11 @@ public class StandardShader implements Shader {
 		modelViewMatrix = program.getUniformLocation("modelViewMatrix");
 		modelViewProjectionMatrix = program.getUniformLocation("modelViewProjectionMatrix");
 		viewProjectionMatrix = program.getUniformLocation("viewProjectionMatrix");
+
 		normalMatrix = program.getUniformLocation("normalMatrix");
 		texture = program.getUniformLocation("texture");
+		normal_texture = program.getUniformLocation("normal_texture");
+		useNormal = program.getUniformLocation("useNormal");
 		viewSpaceLightPosition = program.getUniformLocation("viewSpaceLightPosition");
 
 		material_shininess = program.getUniformLocation("material_shininess");
@@ -100,7 +106,16 @@ public class StandardShader implements Shader {
 		program.setUniformMatrix(modelViewMatrix, camera.view.cpy().mul(renderable.worldTransform));
 		program.setUniformMatrix(modelViewProjectionMatrix, camera.projection.cpy().mul(camera.view).mul(renderable.worldTransform));
 		program.setUniformMatrix(normalMatrix, camera.view.cpy().mul(renderable.worldTransform).tra().inv());
+
 		program.setUniformi(texture, context.textureBinder.bind(((TextureAttribute) renderable.material.get(TextureAttribute.Diffuse)).textureDescription));
+		Attribute normalAttribute = renderable.material.get(TextureAttribute.Normal);
+		if (normalAttribute != null) {
+			program.setUniformi(useNormal, 1);
+			program.setUniformi(normal_texture, context.textureBinder.bind(((TextureAttribute) normalAttribute).textureDescription));
+		} else {
+			program.setUniformi(useNormal, 0);
+		}
+
 		if (lightEntity != null) {
 			// We need to flip the z and y values since I use them differently in the game logic..
 			Vector3 cpy = lightEntity.getPosition().cpy();
@@ -111,6 +126,7 @@ public class StandardShader implements Shader {
 		} else {
 			program.setUniformf(viewSpaceLightPosition, new Vector3());
 		}
+
 		renderable.mesh.render(program,
 				renderable.primitiveType,
 				renderable.meshPartOffset,
