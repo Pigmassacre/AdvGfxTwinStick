@@ -61,9 +61,11 @@ public class GameScreen extends AbstractScreen {
 				new Material(TextureAttribute.createDiffuse(floorTex)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
+		Texture bulletTex = new Texture(Gdx.files.internal("floor.png"));
+		bulletTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		Model bulletModel = modelBuilder.createBox(0.5f, 0.5f, 0.5f,
-				new Material(ColorAttribute.createDiffuse(Color.GREEN)),
-				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+				new Material(TextureAttribute.createDiffuse(bulletTex)),
+				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
 		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerModel, bulletModel, 0f, 0f, 0f));
 		for (int x = 0; x < 12; x++) {

@@ -53,8 +53,6 @@ void main() {
         + emissive;
     vec4 fragmentColor = vec4(shading, 1.0);
 
-
-    //gl_FragColor = vec4(texture2D(texture, v_texCoord0).yxz, 1.0);
     gl_FragColor = fragmentColor;
 }
 

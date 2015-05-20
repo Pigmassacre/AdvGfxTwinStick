@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.pigmassacre.twinstick.Entity;
@@ -39,6 +40,7 @@ public class StandardShader implements Shader {
 
 	private int scene_ambient_light;
 	private int scene_light;
+	private float stateTime = 0f;
 
 	@Override
 	public void init() {
@@ -101,9 +103,11 @@ public class StandardShader implements Shader {
 		program.setUniformMatrix(normalMatrix, renderable.worldTransform.cpy().mul(camera.view).inv().tra());
 		program.setUniformi(texture, context.textureBinder.bind(((TextureAttribute) renderable.material.get(TextureAttribute.Diffuse)).textureDescription));
 		if (lightEntity != null) {
+			stateTime += Gdx.graphics.getDeltaTime();
+			// We need to flip the z and y values since I use them differently in the game logic..
 			Vector3 cpy = lightEntity.getPosition().cpy();
 			float temp = cpy.z;
-			cpy.z = cpy.y;
+			cpy.z = cpy.y + MathUtils.sin(stateTime * 0.005f) * 5f;
 			cpy.y = temp;
 			program.setUniformf(viewSpaceLightPosition, cpy.mul(camera.view));
 		} else {
