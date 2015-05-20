@@ -26,8 +26,8 @@ public class StandardShader implements Shader {
 	@Override
 	public void init() {
 		program = new ShaderProgram(
-				Gdx.files.internal("billboard.vert").readString(),
-				Gdx.files.internal("billboard.frag").readString());
+				Gdx.files.internal("standard.vert").readString(),
+				Gdx.files.internal("standard.frag").readString());
 		if (!program.isCompiled()) {
 			throw new GdxRuntimeException(program.getLog());
 		}
