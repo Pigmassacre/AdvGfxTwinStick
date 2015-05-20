@@ -31,10 +31,10 @@ vec3 calculateSpecular(vec3 specularLight, vec3 materialSpecular, float material
     float normalizationFactor = ((materialShininess + 2.0) / 8.0);
     return specularLight * materialSpecular * pow(max(0, dot(h, normal)), materialShininess) * normalizationFactor;
 }
-/*
+
 vec3 calculateFresnel(vec3 materialSpecular, vec3 normal, vec3 directionFromEye) {
  return materialSpecular + (vec3(1.0) - materialSpecular) * pow(clamp(1.0 + dot(directionFromEye, normal), 0.0, 1.0), 5.0);
-}*/
+}
 
 void main() {
 
@@ -47,9 +47,11 @@ void main() {
     vec3 directionToLight = normalize(viewSpaceLightPosition - viewSpacePosition);
     vec3 directionFromEye = normalize(viewSpacePosition);
 
+    vec3 fresnelSpecular = calculateFresnel(specular, normal,directionFromEye);
+
     vec3 shading = calculateAmbient(scene_ambient_light, ambient)
         + calculateDiffuse(scene_light, diffuse, normal, directionToLight)
-        + calculateSpecular(scene_light, specular, material_shininess, normal, directionToLight, directionFromEye)
+        + calculateSpecular(scene_light, fresnelSpecular, material_shininess, normal, directionToLight, directionFromEye)
         + emissive;
     vec4 fragmentColor = vec4(shading, 1.0);
 
