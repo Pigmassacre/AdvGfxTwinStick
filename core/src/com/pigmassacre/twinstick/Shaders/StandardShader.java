@@ -101,7 +101,11 @@ public class StandardShader implements Shader {
 		program.setUniformMatrix(normalMatrix, renderable.worldTransform.cpy().mul(camera.view).inv().tra());
 		program.setUniformi(texture, context.textureBinder.bind(((TextureAttribute) renderable.material.get(TextureAttribute.Diffuse)).textureDescription));
 		if (lightEntity != null) {
-			program.setUniformf(viewSpaceLightPosition, camera.view.cpy().getTranslation(lightEntity.getPosition().cpy()));
+			Vector3 cpy = lightEntity.getPosition().cpy();
+			float temp = cpy.z;
+			cpy.z = cpy.y;
+			cpy.y = temp;
+			program.setUniformf(viewSpaceLightPosition, cpy.mul(camera.view));
 		} else {
 			program.setUniformf(viewSpaceLightPosition, new Vector3());
 		}
