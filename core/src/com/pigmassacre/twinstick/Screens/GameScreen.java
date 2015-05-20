@@ -36,7 +36,7 @@ public class GameScreen extends AbstractScreen {
 		camera.zoom = 1f / 16f;
 		camera.lookAt(Level.INSTANCE.getBounds().x + Level.INSTANCE.getBounds().width / 2f,
 				0f,
-				Level.INSTANCE.getBounds().y + Level.INSTANCE.getBounds().height / 2f);
+				Level.INSTANCE.getBounds().y);
 		camera.near = 0f;
 		camera.far = 300f;
 		camera.update();
@@ -71,11 +71,11 @@ public class GameScreen extends AbstractScreen {
 				new Material(TextureAttribute.createDiffuse(bulletTex)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
-		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerModel, bulletModel, 0f, 0f, 0f));
+		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerModel, bulletModel, Level.INSTANCE.getBounds().width / 2f, Level.INSTANCE.getBounds().height / 2f, 0f));
 
 		for (int x = 0; x < Level.INSTANCE.getBounds().width / 5f; x++) {
-			Level.INSTANCE.addEntity(new Entity(box, (5f * x) - 5f, -5f, 0));
-			Level.INSTANCE.addEntity(new Entity(box, (5f * x) - 5f, Level.INSTANCE.getBounds().height, 0));
+			Level.INSTANCE.addEntity(new Entity(box, (5f * x), -5f, 0));
+			Level.INSTANCE.addEntity(new Entity(box, (5f * x), Level.INSTANCE.getBounds().height, 0));
 		}
 
 		for (int y = 0; y < Level.INSTANCE.getBounds().height / 5f; y++) {
