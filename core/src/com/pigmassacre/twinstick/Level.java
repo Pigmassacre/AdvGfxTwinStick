@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import com.pigmassacre.twinstick.Shaders.BillboardShader;
+import com.pigmassacre.twinstick.Shaders.StandardShader;
 
 /**
  * Created by Pigmassacre on 2015-05-11.
@@ -26,7 +26,7 @@ public enum Level {
 	private PlayerControllerInputAdapter playerControllerInputAdapter;
 
 	Level() {
-		shader = new BillboardShader();
+		shader = new StandardShader();
 		shader.init();
 
 		modelBatch = new ModelBatch();

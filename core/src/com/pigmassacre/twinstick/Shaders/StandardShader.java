@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 /**
  * Created by Pigmassacre on 2015-05-19.
  */
-public class BillboardShader implements Shader {
+public class StandardShader implements Shader {
 
 	ShaderProgram program;
 	Camera camera;
