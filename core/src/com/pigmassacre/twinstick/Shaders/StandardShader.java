@@ -10,15 +10,18 @@ import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.pigmassacre.twinstick.Entity;
 
 /**
  * Created by Pigmassacre on 2015-05-19.
  */
 public class StandardShader implements Shader {
 
-	ShaderProgram program;
-	Camera camera;
-	RenderContext context;
+	private ShaderProgram program;
+	private Camera camera;
+	private RenderContext context;
+
+	private Entity lightEntity;
 
 	private int modelMatrix;
 	private int modelViewMatrix;
@@ -86,7 +89,7 @@ public class StandardShader implements Shader {
 	public void render(Renderable renderable) {
 		program.setUniformf(material_shininess, 25f);
 		program.setUniformf(material_diffuse_color, 1f, 1f, 1f);
-		program.setUniformf(material_specular_color, 0f, 0f, 0f);
+		program.setUniformf(material_specular_color, 0.1f, 0.1f, 0.1f);
 		program.setUniformf(material_emissive_color, 0f, 0f, 0f);
 
 		program.setUniformf(scene_ambient_light, 0.05f, 0.05f, 0.05f);
@@ -97,7 +100,11 @@ public class StandardShader implements Shader {
 		program.setUniformMatrix(modelViewProjectionMatrix, camera.projection.cpy().mul(camera.view).mul(renderable.worldTransform));
 		program.setUniformMatrix(normalMatrix, renderable.worldTransform.cpy().mul(camera.view).inv().tra());
 		program.setUniformi(texture, context.textureBinder.bind(((TextureAttribute) renderable.material.get(TextureAttribute.Diffuse)).textureDescription));
-		program.setUniformf(viewSpaceLightPosition, camera.project(new Vector3(0f, 10f, 25f)));
+		if (lightEntity != null) {
+			program.setUniformf(viewSpaceLightPosition, camera.view.cpy().getTranslation(lightEntity.getPosition().cpy()));
+		} else {
+			program.setUniformf(viewSpaceLightPosition, new Vector3());
+		}
 		renderable.mesh.render(program,
 				renderable.primitiveType,
 				renderable.meshPartOffset,
@@ -114,4 +121,11 @@ public class StandardShader implements Shader {
 		program.dispose();
 	}
 
+	public Entity getLightEntity() {
+		return lightEntity;
+	}
+
+	public void setLightEntity(Entity lightEntity) {
+		this.lightEntity = lightEntity;
+	}
 }

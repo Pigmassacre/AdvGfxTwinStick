@@ -16,7 +16,7 @@ public enum Level {
 	INSTANCE;
 
 	private ModelBatch modelBatch;
-	private Shader shader;
+	private StandardShader shader;
 
 	private Rectangle bounds;
 
@@ -57,6 +57,7 @@ public enum Level {
 	public void setPlayerEntity(PlayerEntity playerEntity) {
 		this.playerEntity = playerEntity;
 		addEntity(playerEntity);
+		shader.setLightEntity(playerEntity);
 		if (Controllers.getControllers().size > 0) {
 			playerControllerInputAdapter = new PlayerControllerInputAdapter(playerEntity);
 			Controllers.getControllers().get(0).addListener(playerControllerInputAdapter);
