@@ -3,23 +3,18 @@ package com.pigmassacre.twinstick.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
-import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.pigmassacre.twinstick.Assets;
 import com.pigmassacre.twinstick.Entity;
 import com.pigmassacre.twinstick.Level;
 import com.pigmassacre.twinstick.PlayerEntity;
-import com.pigmassacre.twinstick.Shaders.BillboardShader;
 
 /**
  * Created by Pigmassacre on 2015-05-11.
@@ -44,17 +39,26 @@ public class GameScreen extends AbstractScreen {
 
 		cameraInputController = new CameraInputController(camera);
 		inputMultiplexer.addProcessor(cameraInputController);
-		ModelBuilder modelBuilder = new ModelBuilder();
-		Model playerModel = modelBuilder.createBox(3f, 3f, 0f,
-				new Material(ColorAttribute.createDiffuse(Color.GREEN)),
-				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
-		Model box = modelBuilder.createBox(5f, 5f, 5f,
-				new Material(TextureAttribute.createDiffuse(Assets.getAtlas().findRegion("wall"))),
+		ModelBuilder modelBuilder = new ModelBuilder();
+
+		Texture playerTex = new Texture(Gdx.files.internal("dirt.png"));
+		playerTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+		Model playerModel = modelBuilder.createBox(3f, 3f, 1f,
+				new Material(TextureAttribute.createDiffuse(playerTex)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
+
+		Texture boxTex = new Texture(Gdx.files.internal("wall.png"));
+		boxTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+		Model box = modelBuilder.createBox(5f, 5f, 5f,
+				new Material(TextureAttribute.createDiffuse(boxTex)),
+				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
+
+		Texture floorTex = new Texture(Gdx.files.internal("floor.png"));
+		floorTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		Model floorModel = modelBuilder.createBox(5f, 1f, 5f,
-				new Material(TextureAttribute.createDiffuse(Assets.getAtlas().findRegion("floor"))),
+				new Material(TextureAttribute.createDiffuse(floorTex)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
 		Model bulletModel = modelBuilder.createBox(0.5f, 0.5f, 0.5f,

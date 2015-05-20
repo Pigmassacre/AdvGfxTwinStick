@@ -2,11 +2,8 @@ package com.pigmassacre.twinstick;
 
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.Shader;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
@@ -18,7 +15,6 @@ import com.pigmassacre.twinstick.Shaders.BillboardShader;
 public enum Level {
 	INSTANCE;
 
-	private DirectionalLight directionalLight;
 	private ModelBatch modelBatch;
 	private Shader shader;
 

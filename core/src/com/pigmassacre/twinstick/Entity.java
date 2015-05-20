@@ -53,6 +53,10 @@ public class Entity {
 		return instance.model;
 	}
 
+	public ModelInstance getInstance() {
+		return instance;
+	}
+
 	public Rectangle getRectangle() {
 		return rectangle;
 	}

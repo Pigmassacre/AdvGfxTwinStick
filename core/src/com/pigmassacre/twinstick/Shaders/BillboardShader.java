@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -20,6 +21,7 @@ public class BillboardShader implements Shader {
 
 	private int u_projViewTrans;
 	private int u_worldTrans;
+	private int texture;
 
 	@Override
 	public void init() {
@@ -29,6 +31,9 @@ public class BillboardShader implements Shader {
 		if (!program.isCompiled()) {
 			throw new GdxRuntimeException(program.getLog());
 		}
+		u_projViewTrans = program.getUniformLocation("u_projViewTrans");
+		u_worldTrans = program.getUniformLocation("u_worldTrans");
+		texture = program.getUniformLocation("texture");
 	}
 
 	@Override
@@ -38,7 +43,7 @@ public class BillboardShader implements Shader {
 
 	@Override
 	public boolean canRender(Renderable instance) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -54,6 +59,7 @@ public class BillboardShader implements Shader {
 	@Override
 	public void render(Renderable renderable) {
 		program.setUniformMatrix(u_worldTrans, renderable.worldTransform);
+		program.setUniformi(texture, context.textureBinder.bind(((TextureAttribute) renderable.material.get(TextureAttribute.Diffuse)).textureDescription));
 		renderable.mesh.render(program,
 				renderable.primitiveType,
 				renderable.meshPartOffset,
