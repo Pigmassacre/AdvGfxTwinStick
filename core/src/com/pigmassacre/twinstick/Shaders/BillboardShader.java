@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.pigmassacre.twinstick.Entity;
@@ -17,7 +16,7 @@ import com.pigmassacre.twinstick.Entity;
 /**
  * Created by Pigmassacre on 2015-05-19.
  */
-public class StandardShader implements Shader {
+public class BillboardShader implements Shader {
 
 	private ShaderProgram program;
 	private Camera camera;
@@ -28,7 +27,7 @@ public class StandardShader implements Shader {
 	private int modelMatrix;
 	private int modelViewMatrix;
 	private int modelViewProjectionMatrix;
-	private int viewProjectionMatrix;
+	private int projectionMatrix;
 
 	private int normalMatrix;
 	private int texture;
@@ -47,7 +46,7 @@ public class StandardShader implements Shader {
 	@Override
 	public void init() {
 		program = new ShaderProgram(
-				Gdx.files.internal("standard.vert").readString(),
+				Gdx.files.internal("billboard.vert").readString(),
 				Gdx.files.internal("standard.frag").readString());
 		if (!program.isCompiled()) {
 			throw new GdxRuntimeException(program.getLog());
@@ -55,7 +54,7 @@ public class StandardShader implements Shader {
 		modelMatrix = program.getUniformLocation("modelMatrix");
 		modelViewMatrix = program.getUniformLocation("modelViewMatrix");
 		modelViewProjectionMatrix = program.getUniformLocation("modelViewProjectionMatrix");
-		viewProjectionMatrix = program.getUniformLocation("viewProjectionMatrix");
+		projectionMatrix = program.getUniformLocation("projectionMatrix");
 
 		normalMatrix = program.getUniformLocation("normalMatrix");
 		texture = program.getUniformLocation("texture");
@@ -87,7 +86,7 @@ public class StandardShader implements Shader {
 		this.camera = camera;
 		this.context = context;
 		program.begin();
-		program.setUniformMatrix(viewProjectionMatrix, camera.combined);
+		program.setUniformMatrix(projectionMatrix, camera.projection);
 		context.setDepthTest(GL20.GL_LEQUAL);
 		context.setCullFace(GL20.GL_BACK);
 	}
@@ -99,8 +98,8 @@ public class StandardShader implements Shader {
 		program.setUniformf(material_specular_color, 0.1f, 0.1f, 0.1f);
 		program.setUniformf(material_emissive_color, 0f, 0f, 0f);
 
-		program.setUniformf(scene_ambient_light, 0.5f, 0.5f, 0.5f);
-		program.setUniformf(scene_light, 0.8f, 0.8f, 0.8f);
+		program.setUniformf(scene_ambient_light, 0.25f, 0.25f, 0.25f);
+		program.setUniformf(scene_light, 0.75f, 0.75f, 0.75f);
 
 		program.setUniformMatrix(modelMatrix, renderable.worldTransform);
 		program.setUniformMatrix(modelViewMatrix, camera.view.cpy().mul(renderable.worldTransform));

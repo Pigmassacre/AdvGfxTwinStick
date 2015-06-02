@@ -3,10 +3,12 @@ package com.pigmassacre.twinstick;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
+import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.pigmassacre.twinstick.Shaders.BillboardShader;
 import com.pigmassacre.twinstick.Shaders.StandardShader;
 
 /**
@@ -16,7 +18,10 @@ public enum Level {
 	INSTANCE;
 
 	private ModelBatch modelBatch;
-	private StandardShader shader;
+	private StandardShader stdShader;
+	private BillboardShader bbShader;
+
+	private DecalBatch decalBatch;
 
 	private Rectangle bounds;
 
@@ -26,8 +31,11 @@ public enum Level {
 	private PlayerControllerInputAdapter playerControllerInputAdapter;
 
 	Level() {
-		shader = new StandardShader();
-		shader.init();
+		stdShader = new StandardShader();
+		stdShader.init();
+
+		bbShader = new BillboardShader();
+		bbShader.init();
 
 		modelBatch = new ModelBatch();
 
@@ -36,28 +44,38 @@ public enum Level {
 		entities = new Array<Entity>();
 	}
 
+	public void setupDecalBatch(Camera camera) {
+		decalBatch = new DecalBatch(new CameraGroupStrategy(camera));
+	}
+
 	public void render(float delta, Camera camera) {
 		playerControllerInputAdapter.update(delta);
 
 		for (Entity entity : getEntities()) {
 			entity.update(delta);
-			if (!Intersector.overlaps(bounds, entity.getRectangle())) {
-				//entities.removeValue(entity, true);
-				//System.out.println("out of bounds");
+			if (!Intersector.overlaps(entity.getRectangle(), bounds)) {
+				if (entity.killWhenOutOfBounds()) {
+					entities.removeValue(entity, true);
+				}
+
 			}
 		}
+		playerEntity.update(delta);
+		playerEntity.updateCameraPos(camera);
 
 		modelBatch.begin(camera);
 		for (Entity entity : getEntities()) {
-			entity.render(modelBatch, shader);
+			entity.render(modelBatch, stdShader);
 		}
 		modelBatch.end();
+
+		decalBatch.add(playerEntity.decal);
+		decalBatch.flush();
 	}
 
 	public void setPlayerEntity(PlayerEntity playerEntity) {
 		this.playerEntity = playerEntity;
-		addEntity(playerEntity);
-		shader.setLightEntity(playerEntity);
+		stdShader.setLightEntity(playerEntity);
 		if (Controllers.getControllers().size > 0) {
 			playerControllerInputAdapter = new PlayerControllerInputAdapter(playerEntity);
 			Controllers.getControllers().get(0).addListener(playerControllerInputAdapter);
@@ -73,7 +91,7 @@ public enum Level {
 	}
 
 	public void dispose() {
-		shader.dispose();
+		stdShader.dispose();
 		modelBatch.dispose();
 		for (Entity entity : getEntities()) {
 			entity.getModel().dispose();

@@ -7,8 +7,6 @@ import com.pigmassacre.twinstick.TwinStick;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		//TexturePacker.process("../../unpackedassets/packable", "../assets", "atlas");
-
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new TwinStick(), config);
 	}

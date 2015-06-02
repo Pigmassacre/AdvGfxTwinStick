@@ -5,11 +5,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.decals.Decal;
+import com.badlogic.gdx.graphics.g3d.particles.renderers.BillboardRenderer;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pigmassacre.twinstick.Entity;
@@ -31,8 +35,8 @@ public class GameScreen extends AbstractScreen {
 		viewport = new ScreenViewport(camera);
 
 		camera.position.set(Level.INSTANCE.getBounds().x + Level.INSTANCE.getBounds().width / 2f,
-				40f,
-				Level.INSTANCE.getBounds().y + Level.INSTANCE.getBounds().height / 2f);
+				80f,
+				Level.INSTANCE.getBounds().y + Level.INSTANCE.getBounds().height);
 		camera.zoom = 1f / 16f;
 		camera.lookAt(Level.INSTANCE.getBounds().x + Level.INSTANCE.getBounds().width / 2f,
 				0f,
@@ -46,12 +50,8 @@ public class GameScreen extends AbstractScreen {
 
 		ModelBuilder modelBuilder = new ModelBuilder();
 
-		Texture playerTex = new Texture(Gdx.files.internal("dirt.png"));
-		playerTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-		Model playerModel = modelBuilder.createBox(3f, 3f, 1f,
-				new Material(TextureAttribute.createDiffuse(playerTex)),
-				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
-
+		Texture playerTex = new Texture(Gdx.files.internal("ranger/idle_00.png"));
+		Decal playerDecal = Decal.newDecal(playerTex.getWidth() / 3f, playerTex.getHeight() / 3f, new TextureRegion(playerTex), true);
 
 		Texture boxTex = new Texture(Gdx.files.internal("wall.png"));
 		boxTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
@@ -74,7 +74,7 @@ public class GameScreen extends AbstractScreen {
 				new Material(TextureAttribute.createDiffuse(bulletTex)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
 
-		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerModel, bulletModel, Level.INSTANCE.getBounds().width / 2f, Level.INSTANCE.getBounds().height / 2f, 0f));
+		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerDecal, bulletModel, Level.INSTANCE.getBounds().width / 2f, Level.INSTANCE.getBounds().height / 2f, 0f));
 
 		for (int x = 0; x < Level.INSTANCE.getBounds().width / 5f; x++) {
 			Level.INSTANCE.addEntity(new Entity(box, (5f * x), -5f, 0));
@@ -91,6 +91,8 @@ public class GameScreen extends AbstractScreen {
 				Level.INSTANCE.addEntity(new Entity(floorModel, 5f * x, 5f * y, -3f));
 			}
 		}
+
+		Level.INSTANCE.setupDecalBatch(camera);
 	}
 
 	@Override

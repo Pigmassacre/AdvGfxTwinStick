@@ -10,10 +10,10 @@ import com.badlogic.gdx.math.collision.BoundingBox;
  */
 public class Entity {
 
-	private Vector3 position;
-	private Vector3 velocity;
+	protected Vector3 position;
+	protected Vector3 velocity;
 
-	private Rectangle rectangle;
+	protected Rectangle rectangle;
 
 	private ModelInstance instance;
 
@@ -24,6 +24,9 @@ public class Entity {
 		rectangle = new Rectangle(x, y, boundingBox.getWidth(), boundingBox.getDepth());
 
 		instance = new ModelInstance(model);
+	}
+
+	public Entity() {
 	}
 
 	public void update(float delta) {
@@ -59,5 +62,9 @@ public class Entity {
 
 	public Rectangle getRectangle() {
 		return rectangle;
+	}
+
+	public boolean killWhenOutOfBounds() {
+		return false;
 	}
 }
