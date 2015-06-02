@@ -34,11 +34,6 @@ public class Entity {
 		rectangle.setPosition(position.x, position.y);
 	}
 
-	public void render(ModelBatch batch, Environment environment) {
-		instance.transform.setToTranslation(position.x, position.z, position.y);
-		batch.render(instance, environment);
-	}
-
 	public void render(ModelBatch batch, Shader shader) {
 		instance.transform.setToTranslation(position.x, position.z, position.y);
 		batch.render(instance, shader);

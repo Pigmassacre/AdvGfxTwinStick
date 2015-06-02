@@ -4,6 +4,7 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
+import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
@@ -53,28 +54,34 @@ public enum Level {
 
 		for (Entity entity : getEntities()) {
 			entity.update(delta);
+			if (entity instanceof DecalEntity) {
+				((DecalEntity) entity).updateCameraPos(camera);
+			}
 			if (!Intersector.overlaps(entity.getRectangle(), bounds)) {
 				if (entity.killWhenOutOfBounds()) {
 					entities.removeValue(entity, true);
+				} else {
+					entity.getVelocity().setZero();
 				}
-
 			}
 		}
-		playerEntity.update(delta);
-		playerEntity.updateCameraPos(camera);
 
 		modelBatch.begin(camera);
 		for (Entity entity : getEntities()) {
-			entity.render(modelBatch, stdShader);
+			if (entity instanceof DecalEntity) {
+				decalBatch.add(((DecalEntity) entity).decal);
+			} else {
+				entity.render(modelBatch, stdShader);
+			}
+
 		}
 		modelBatch.end();
-
-		decalBatch.add(playerEntity.decal);
 		decalBatch.flush();
 	}
 
 	public void setPlayerEntity(PlayerEntity playerEntity) {
 		this.playerEntity = playerEntity;
+		addEntity(playerEntity);
 		stdShader.setLightEntity(playerEntity);
 		if (Controllers.getControllers().size > 0) {
 			playerControllerInputAdapter = new PlayerControllerInputAdapter(playerEntity);

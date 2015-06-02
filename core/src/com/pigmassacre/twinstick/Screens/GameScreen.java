@@ -53,6 +53,16 @@ public class GameScreen extends AbstractScreen {
 		Texture playerTex = new Texture(Gdx.files.internal("ranger/idle_00.png"));
 		Decal playerDecal = Decal.newDecal(playerTex.getWidth() / 3f, playerTex.getHeight() / 3f, new TextureRegion(playerTex), true);
 
+		Texture bulletTex = new Texture(Gdx.files.internal("arrow.png"));
+		//Decal bulletDecal = Decal.newDecal(bulletTex.getWidth() / 3f, bulletTex.getHeight() / 3f, new TextureRegion(bulletTex), true);
+
+		Level.INSTANCE.setPlayerEntity(new PlayerEntity(
+				playerDecal,
+						bulletTex,
+				Level.INSTANCE.getBounds().width / 2f,
+				Level.INSTANCE.getBounds().height / 2f, 0f)
+		);
+
 		Texture boxTex = new Texture(Gdx.files.internal("wall.png"));
 		boxTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 		Texture boxNormalTex = new Texture(Gdx.files.internal("wall_normal.png"));
@@ -67,14 +77,6 @@ public class GameScreen extends AbstractScreen {
 		Model floorModel = modelBuilder.createBox(5f, 1f, 5f,
 				new Material(TextureAttribute.createDiffuse(floorTex)),
 				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
-
-		Texture bulletTex = new Texture(Gdx.files.internal("floor.png"));
-		bulletTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-		Model bulletModel = modelBuilder.createBox(0.5f, 0.5f, 0.5f,
-				new Material(TextureAttribute.createDiffuse(bulletTex)),
-				VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates);
-
-		Level.INSTANCE.setPlayerEntity(new PlayerEntity(playerDecal, bulletModel, Level.INSTANCE.getBounds().width / 2f, Level.INSTANCE.getBounds().height / 2f, 0f));
 
 		for (int x = 0; x < Level.INSTANCE.getBounds().width / 5f; x++) {
 			Level.INSTANCE.addEntity(new Entity(box, (5f * x), -5f, 0));
